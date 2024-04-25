@@ -21,17 +21,19 @@ declare module '@auth/core/adapters' {
 
 // can use inside middleware because prisma cant run in the edge, but auth config can
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  callbacks: {
-    async signIn({ user }) {
-      const existingUser = await getUserById(user?.id || '');
-
-      if (!existingUser || !existingUser.emailVerified) {
-        console.log(existingUser);
-        return false;
-      }
-
-      return true;
+  pages: {
+    signIn: '/auth/login',
+    error: '/auth/error',
+  },
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
     },
+  },
+  callbacks: {
     async session({ token, session }) {
       if (session.user && token.sub) {
         session.user.id = token.sub;
@@ -43,7 +45,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token }) {
       if (!token.sub) return token;
 
       const existingUser = await getUserById(token.sub);

@@ -4,10 +4,20 @@ import bcrypt from 'bcryptjs';
 
 import { LoginSchema } from '@/schemas';
 import { getUserByEmail } from '@/data/user';
+import Github from 'next-auth/providers/github';
+import Google from 'next-auth/providers/google';
 
 // can use prisma here
 export default {
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
+    Github({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+    }),
     Credentials({
       async authorize(credentials) {
         const validateFields = LoginSchema.safeParse(credentials);
