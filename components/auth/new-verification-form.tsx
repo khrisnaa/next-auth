@@ -30,7 +30,7 @@ export default function NewVerificationForm() {
       .catch(() => {
         setError('Something when error!');
       });
-  }, [token]);
+  }, [token, success, error]);
 
   useEffect(() => {
     onSubmit();

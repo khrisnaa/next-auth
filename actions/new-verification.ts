@@ -1,8 +1,8 @@
+'use server';
+
 import { getUserByEmail } from '@/data/user';
 import { getVerificationTokenByToken } from '@/data/verification-token';
 import { db } from '@/lib/db';
-import { error } from 'console';
-import email from 'next-auth/providers/email';
 
 export const newVerification = async (token: string) => {
   const existingToken = await getVerificationTokenByToken(token);

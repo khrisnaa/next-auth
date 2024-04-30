@@ -7,7 +7,6 @@ import { signIn } from '@/auth';
 import { LoginSchema } from '@/schemas';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { getUserByEmail } from '@/data/user';
-import { error } from 'console';
 import { generateVerificationToken } from '@/lib/token';
 import { sendVerificationEmail } from '@/lib/mail';
 
