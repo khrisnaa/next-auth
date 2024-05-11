@@ -2,12 +2,14 @@
 
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
+import { AuthError } from 'next-auth';
 
 import { signIn } from '@/auth';
 import { LoginSchema } from '@/schemas';
-import { getUserByEmail } from '@/utils/user';
+import { getUserByEmail } from '@/data/user';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
-import { AuthError } from 'next-auth';
+import { generateVerificationToken } from '@/lib/tokens';
+import { sendVerificationEmail } from '@/lib/mails';
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   //validate values in backend
@@ -24,9 +26,15 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   const passwordMatch = await bcrypt.compare(password, existingUser.password);
   if (!passwordMatch) return { error: 'Invalid credentials!' };
 
-  // if (!existingUser.emailVerified) {
-  //   return { success: 'Confirmation email sent!' };
-  // }
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(email);
+
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token,
+    );
+    return { success: 'Confirmation email sent!' };
+  }
 
   try {
     await signIn('credentials', {

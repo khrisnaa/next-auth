@@ -1,6 +1,6 @@
 //identify protected and public route
 
-export const publicRoutes = ['/'];
+export const publicRoutes = ['/', '/auth/new-verification'];
 
 export const authRoutes = ['/auth/login', '/auth/register', '/auth/error'];
 

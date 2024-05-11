@@ -48,7 +48,7 @@ export const LoginForm = () => {
 
   const errors = form.formState.errors;
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
 

@@ -3,7 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 
 import { db } from './lib/db';
 import authConfig from '@/auth.config';
-import { getUserById } from './utils/user';
+import { getUserById } from './data/user';
 import { UserRole } from '@prisma/client';
 
 //declare interface or type for session
@@ -25,13 +25,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: '/auth/login',
     error: '/auth/error',
   },
+  events: {
+    //if using oauth automatically set email verified to true
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
-    //no matter if api routes or sever actions, its all can handle inside this auth.ts
-    // async signIn(){
-    //   //block user from login
+    //make signin will be able to call inside api routes or sever actions
+    async signIn({ user, account }) {
+      //allow oauth without email verification
+      if (account?.provider != 'credentials') return true;
 
-    //   return true
-    // },
+      const existingUser = await getUserById(user.id || '');
+
+      //block user from login
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
     async jwt({ token }) {
       if (!token.sub) return token;
 

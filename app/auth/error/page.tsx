@@ -1,18 +1,6 @@
-import { CardWrapper } from '@/components/auth/card-wrapper';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { ErrorCard } from '@/components/auth/error-card';
 
 const Page = () => {
-  return (
-    <CardWrapper
-      headerLabel="Something went wrong!"
-      backButtonHref="/auth/login"
-      backButtonLabel="Back to login"
-    >
-      <div className="flex items-center justify-center">
-        <ExclamationTriangleIcon className="h-10 w-10 text-destructive" />
-      </div>
-    </CardWrapper>
-  );
+  return <ErrorCard />;
 };
-
 export default Page;

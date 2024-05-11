@@ -21,6 +21,8 @@ model User {
   password      String?
   role          UserRole  @default(USER)
   accounts      Account[]
+
+  @@map("users")
 }
 
 model Account {
@@ -40,4 +42,15 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  id      String   @id @default(uuid())
+  token   String   @unique
+  email   String
+  expires DateTime
+
+  @@unique([token, email])
+  @@map("verification_tokens")
 }
