@@ -1,10 +1,11 @@
 import NextAuth from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
-import { db } from './lib/db';
+import { db } from '@/lib/db';
 import authConfig from '@/auth.config';
-import { getUserById } from './data/user';
+import { getUserById } from '@/data/user';
 import { UserRole } from '@prisma/client';
+import { getTwoFactorConfirmationByUserId } from './data/two-factor-confirmation';
 
 //declare interface or type for session
 declare module 'next-auth' {
@@ -42,8 +43,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       const existingUser = await getUserById(user.id || '');
 
-      //block user from login
+      //prevent signin without email verification
       if (!existingUser?.emailVerified) return false;
+
+      //prevent signin without 2FA if its active
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfrimation = await getTwoFactorConfirmationByUserId(
+          existingUser.id,
+        );
+
+        if (!twoFactorConfrimation) return false;
+
+        //delete two factor confirmation for next signin
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfrimation.id },
+        });
+
+        await db.user.update({
+          where: { id: existingUser.id },
+          data: {
+            isTwoFactorEnabled: false,
+          },
+        });
+      }
 
       return true;
     },

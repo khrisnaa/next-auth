@@ -4,8 +4,11 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchParams } from 'next/navigation';
 
 import { NewPasswordSchema } from '@/schemas';
+import { newPassword } from '@/actions/new-password';
+
 import { CardWrapper } from '@/components/auth/card-wrapper';
 import {
   Form,
@@ -18,8 +21,6 @@ import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { newPassword } from '@/actions/new-password';
-import { useSearchParams } from 'next/navigation';
 
 export const NewPasswordForm = () => {
   const [isPending, startTransition] = useTransition();
