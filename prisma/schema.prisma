@@ -54,3 +54,13 @@ model VerificationToken {
   @@unique([token, email])
   @@map("verification_tokens")
 }
+
+model PasswordResetToken {
+  id      String   @id @default(uuid())
+  token   String   @unique
+  email   String
+  expires DateTime
+
+  @@unique([token, email])
+  @@map("password_reset_tokens")
+}

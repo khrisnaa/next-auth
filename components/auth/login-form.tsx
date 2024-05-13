@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export const LoginForm = () => {
   //get error from params and return a message
@@ -111,6 +112,14 @@ export const LoginForm = () => {
                       disabled={isPending}
                     />
                   </FormControl>
+                  <Button
+                    size="sm"
+                    variant="link"
+                    asChild
+                    className="px-0 font-normal"
+                  >
+                    <Link href={'/auth/reset'}>Forgot password</Link>
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
