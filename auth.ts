@@ -11,12 +11,14 @@ import { getTwoFactorConfirmationByUserId } from './data/two-factor-confirmation
 declare module 'next-auth' {
   interface User {
     role: UserRole;
+    isTwoFactorEnabled: boolean;
   }
 }
 
 declare module '@auth/core/adapters' {
   interface AdapterUser {
     role: UserRole;
+    isTwoFactorEnabled: boolean;
   }
 }
 
@@ -78,6 +80,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       //pass token to session callback
       token.role = existingUser?.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },
@@ -85,7 +88,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       //add custom field to user session
       //pass user info to middleware using req.auth
       if (session.user) {
+        session.user.id = token.sub as string;
         session.user.role = token.role as UserRole;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
       return session;
     },

@@ -1,15 +1,17 @@
-import { auth } from '@/auth';
+'use client';
 
 import { LogoutButton } from '@/components/auth/logout-button';
 import { Button } from '@/components/ui/button';
+import { useCurrentUser } from '@/hooks/use-current-user';
 
-const Page = async () => {
-  const session = await auth();
+const Page = () => {
+  const user = useCurrentUser();
+
   return (
     <div className="space-y-6">
-      {JSON.stringify(session)}
+      {JSON.stringify(user)}
       <LogoutButton>
-        <Button>Sign out</Button>
+        <Button>Logout</Button>
       </LogoutButton>
     </div>
   );
