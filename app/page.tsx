@@ -9,8 +9,8 @@ const Page = () => {
           🗝️Auth
         </h1>
         <p className="text-center text-lg text-white">Authentication service</p>
-        <LoginButton>
-          <Button size="lg" variant="secondary">
+        <LoginButton mode="redirect" asChild>
+          <Button size="lg" variant="secondary" className="w-full">
             Sign in
           </Button>
         </LoginButton>

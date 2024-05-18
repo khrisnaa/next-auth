@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/auth';
+import { Toaster } from '@/components/ui/sonner';
 
 const font = Poppins({
   subsets: ['latin'],
@@ -25,7 +26,10 @@ export default async function RootLayout({
     //provider for useSession() in client component
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={font.className}>{children}</body>
+        <body className={font.className}>
+          <Toaster />
+          {children}
+        </body>
       </html>
     </SessionProvider>
   );

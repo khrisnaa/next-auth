@@ -3,6 +3,7 @@ import { currentUser } from '@/lib/auth';
 
 const Page = async () => {
   const user = await currentUser();
+
   if (!user) {
     return null;
   }
