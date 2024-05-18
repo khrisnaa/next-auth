@@ -14,11 +14,13 @@ import {
 } from '@/lib/tokens';
 import { sendVerificationEmail, sendTwoFactorTokenEmail } from '@/lib/mails';
 import { getTwoFactorTokenByEmail } from '@/data/two-factor-token';
-import { error } from 'console';
 import { db } from '@/lib/db';
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string,
+) => {
   //validate values in backend
   const validateFields = LoginSchema.safeParse(values);
   if (!validateFields.success) return { error: 'Invalid fields!' };
@@ -81,7 +83,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo:
+        // callbackUrl ||
+        DEFAULT_LOGIN_REDIRECT,
     });
     return { success: 'Confirmation email sent!' };
   } catch (error) {

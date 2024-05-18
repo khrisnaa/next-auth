@@ -30,7 +30,18 @@ export default middleware((req) => {
   }
 
   if (!isLoggedIn && !isPublicRoutes) {
-    return NextResponse.redirect(new URL('/auth/login', nextUrl));
+    //check last user login path
+    // let callbackUrl = nextUrl.pathname;
+    // if (nextUrl.search) {
+    //   callbackUrl += nextUrl.search;
+    // }
+    // const encodeCallbackUrl = encodeURIComponent(callbackUrl);
+
+    // return NextResponse.redirect(
+    //   new URL(`/auth/login?callbackUrl=${encodeCallbackUrl}`, nextUrl),
+    // );
+
+    return NextResponse.redirect(new URL(`/auth/login`, nextUrl));
   }
 });
 

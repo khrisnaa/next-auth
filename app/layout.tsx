@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
+import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/auth';
 import { Toaster } from '@/components/ui/sonner';
@@ -21,6 +22,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  console.log('🚀 ~ session:', session);
 
   return (
     //provider for useSession() in client component
