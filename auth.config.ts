@@ -24,13 +24,14 @@ export default {
     }),
     Credentials({
       //bypass or make login and return user for api routes/login action
-      async authorize(credentials) {
+      async authorize(credentials): Promise<any> {
         const validateFields = LoginSchema.safeParse(credentials);
 
         if (validateFields.success) {
           const { email, password } = validateFields.data;
 
           const user = await getUserByEmail(email);
+
           if (!user || !user.password) return null;
 
           const passwordMatch = await bcrypt.compare(password, user.password);

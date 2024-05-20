@@ -89,7 +89,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       token.role = existingUser?.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
-
       token.isOauth = !!existingAccount;
 
       return token;
@@ -97,14 +96,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ token, session }) {
       //add custom field to user session
       //pass user info to middleware using req.auth
+
       if (session.user) {
+        session.user.id = token.sub as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;
 
-        session.user.id = token.sub as string;
         session.user.role = token.role as UserRole;
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-
         session.user.isOauth = token.isOauth as boolean;
       }
       return session;

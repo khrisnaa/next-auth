@@ -35,7 +35,6 @@ import { z } from 'zod';
 
 const Page = () => {
   const user = useCurrentUser();
-  console.log('🚀 ~ Page ~  user:', user);
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
